@@ -1,6 +1,6 @@
 import * as utils from "./utils.js";
 
-export class ReactCheckers {
+export default class ReactCheckers {
   constructor(columns) {
     this.columns = columns;
   }

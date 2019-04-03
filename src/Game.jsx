@@ -1,14 +1,14 @@
 import React from "react";
-import { returnPlayerName } from "./utils.js";
-import { ReactCheckers } from "./ReactCheckers.js";
+import { returnPlayerName } from "./utils";
+import ReactCheckers from "./ReactCheckers";
 import Board from "./Board.jsx";
 import { Router } from "react-router-dom";
 import createBrowserHistory from "history/createBrowserHistory";
-import { Opponent } from "./Opponent.js";
+import Opponent from "./Opponent";
 
 const browserHistory = createBrowserHistory();
 
-export class Game extends React.Component {
+export default class Game extends React.Component {
   constructor(props) {
     super(props);
 

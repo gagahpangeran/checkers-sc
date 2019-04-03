@@ -1,5 +1,5 @@
 import React from "react";
-import * as utils from "./utils.js";
+import * as utils from "./utils";
 
 function Square(props) {
   const squareClasses = props["squareClasses"];
