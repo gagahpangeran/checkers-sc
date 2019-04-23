@@ -2,6 +2,12 @@
 
 Repositori untuk proyek Sistem Cerdas Kelompok Dadakan
 
+## Live Version
+
+[https://checker-sc.netlify.com/](https://checker-sc.netlify.com/)
+
+## Anggota
+
 Anggota Kelompok:
 
 - Ardanto Finkan Septa
