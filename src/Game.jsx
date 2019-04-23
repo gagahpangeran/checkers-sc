@@ -4,7 +4,7 @@ import ReactCheckers from "./ReactCheckers";
 import Board from "./Board.jsx";
 import { Router } from "react-router-dom";
 import createBrowserHistory from "history/createBrowserHistory";
-import Opponent from "./Opponent";
+import AI from "./AI";
 
 const browserHistory = createBrowserHistory();
 
@@ -15,11 +15,11 @@ export default class Game extends React.Component {
     this.columns = this.setColumns();
 
     this.ReactCheckers = new ReactCheckers(this.columns);
-    this.Opponent = new Opponent(this.columns);
+    this.AI = new AI(this.columns);
 
     this.state = {
       // players: null,
-      players: 2,
+      players: 1,
       history: [
         {
           boardState: this.createBoard(),
@@ -31,7 +31,8 @@ export default class Game extends React.Component {
       jumpKills: null,
       hasJumped: null,
       stepNumber: 0,
-      winner: null
+      winner: null,
+      level: "easy"
     };
   }
 
@@ -195,52 +196,36 @@ export default class Game extends React.Component {
 
       this.updateStatePostMove(postMoveState);
 
-      // Start computer move is the player is finished
+      // Start AI move is the player is finished
       if (
         postMoveState.currentPlayer === false &&
         postMoveState.winner === null
       ) {
-        this.computerTurn();
+        this.aiTurn();
       }
     }
   }
 
-  computerTurn(piece = null) {
+  aiTurn(piece = null) {
     if (this.state.players > 1) {
       return;
+    }
+
+    let timeMove;
+    let timePostMove;
+
+    if (this.state.level === "easy") {
+      timeMove = 1000;
+      timePostMove = 500;
     }
 
     setTimeout(() => {
       const currentState = this.getCurrentState();
       const boardState = currentState.boardState;
 
-      let computerMove;
-      let coordinates;
-      let moveTo;
-
-      // If var piece != null, the piece has previously jumped.
-      if (piece === null) {
-        //computerMove = this.Opponent.getRandomMove(boardState, 'player2');
-        computerMove = this.Opponent.getSmartMove(
-          this.state,
-          boardState,
-          "player2"
-        );
-
-        coordinates = computerMove.piece;
-        moveTo = computerMove.moveTo;
-      } else {
-        // Prevent the computer player from choosing another piece to move. It must move the active piece
-        computerMove = this.ReactCheckers.getMoves(
-          boardState,
-          piece,
-          boardState[piece].isKing,
-          true
-        );
-        coordinates = piece;
-        moveTo =
-          computerMove[0][Math.floor(Math.random() * computerMove[0].length)];
-      }
+      let aiMove = this.AI.getMove(boardState, "player2", this.state.level);
+      let coordinates = aiMove.piece;
+      let moveTo = aiMove.moveTo;
 
       const clickedSquare = boardState[coordinates];
 
@@ -266,12 +251,12 @@ export default class Game extends React.Component {
 
         this.updateStatePostMove(postMoveState);
 
-        // If the computer player has jumped and is still moving, continue jump with active piece
+        // If the AI player has jumped and is still moving, continue jump with active piece
         if (postMoveState.currentPlayer === false) {
-          this.computerTurn(postMoveState.activePiece);
+          this.aiTurn(postMoveState.activePiece);
         }
-      }, 500);
-    }, 1000);
+      }, timePostMove);
+    }, timeMove);
   }
 
   updateStatePostMove(postMoveState) {
@@ -322,8 +307,6 @@ export default class Game extends React.Component {
     const boardState = currentState.boardState;
     const currentPlayer = currentState.currentPlayer;
     const moves = this.state.moves;
-
-    //        console.log(this.state);
 
     let gameStatus;
 
