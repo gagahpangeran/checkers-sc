@@ -7,22 +7,14 @@ export default class Opponent extends ReactCheckers {
     }
   }
 
-  getComputerMoves(boardState, player) {
+  getPossibleMoves(boardState, player) {
     const self = this;
-    let computerMoves = {};
+    let aiMoves = {};
 
     for (const coordinates in boardState) {
-      if (!boardState.hasOwnProperty(coordinates)) {
-        continue;
-      }
-
       const currentSquare = boardState[coordinates];
 
-      if (currentSquare == null) {
-        continue;
-      }
-
-      if (currentSquare.player !== player) {
+      if (currentSquare == null || currentSquare.player !== player) {
         continue;
       }
 
@@ -34,21 +26,21 @@ export default class Opponent extends ReactCheckers {
       );
 
       if (pieceMoves[0].length > 0 || pieceMoves[1] !== null) {
-        computerMoves[coordinates] = pieceMoves;
+        aiMoves[coordinates] = pieceMoves;
       }
     }
 
-    return computerMoves;
+    return aiMoves;
   }
 
   getRandomMove(boardState, player) {
-    const computerMoves = this.getComputerMoves(boardState, player);
-    const keys = Object.keys(computerMoves);
+    const aiMoves = this.getPossibleMoves(boardState, player);
+    const keys = Object.keys(aiMoves);
     const randomPiece = keys[Math.floor(Math.random() * keys.length)];
 
-    const movesData = computerMoves[randomPiece][0];
+    const possibleMove = aiMoves[randomPiece][0];
     const randomMoveTo =
-      movesData[Math.floor(Math.random() * movesData.length)];
+      possibleMove[Math.floor(Math.random() * possibleMove.length)];
 
     return {
       piece: randomPiece,
