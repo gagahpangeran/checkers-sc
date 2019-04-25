@@ -54,6 +54,7 @@
   border: 3px solid #deb887;
   margin: 5px;
   cursor: pointer;
+  color: #000;
 }
 
 .undo.disabled {

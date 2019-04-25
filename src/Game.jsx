@@ -3,7 +3,7 @@ import { returnPlayerName } from "./utils";
 import ReactCheckers from "./ReactCheckers";
 import Board from "./Board.jsx";
 import { Router } from "react-router-dom";
-import createBrowserHistory from "history/createBrowserHistory";
+import { createBrowserHistory } from "history";
 import AI from "./AI";
 
 const browserHistory = createBrowserHistory();
@@ -18,8 +18,7 @@ export default class Game extends React.Component {
     this.AI = new AI(this.columns);
 
     this.state = {
-      // players: null,
-      players: 1,
+      players: null,
       history: [
         {
           boardState: this.createBoard(),
@@ -32,7 +31,7 @@ export default class Game extends React.Component {
       hasJumped: null,
       stepNumber: 0,
       winner: null,
-      level: "easy"
+      level: null
     };
   }
 
@@ -211,19 +210,16 @@ export default class Game extends React.Component {
       return;
     }
 
-    let timeMove;
-    let timePostMove;
-
-    if (this.state.level === "easy") {
-      timeMove = 1000;
-      timePostMove = 500;
-    }
-
     setTimeout(() => {
       const currentState = this.getCurrentState();
       const boardState = currentState.boardState;
 
-      let aiMove = this.AI.getMove(boardState, "player2", this.state.level);
+      let aiMove = this.AI.getMove(
+        this.state,
+        boardState,
+        "player2",
+        this.state.level
+      );
       let coordinates = aiMove.piece;
       let moveTo = aiMove.moveTo;
 
@@ -252,11 +248,12 @@ export default class Game extends React.Component {
         this.updateStatePostMove(postMoveState);
 
         // If the AI player has jumped and is still moving, continue jump with active piece
+        // console.log(postMoveState);
         if (postMoveState.currentPlayer === false) {
           this.aiTurn(postMoveState.activePiece);
         }
-      }, timePostMove);
-    }, timeMove);
+      }, 500);
+    }, 1000);
   }
 
   updateStatePostMove(postMoveState) {
@@ -296,6 +293,12 @@ export default class Game extends React.Component {
   setPlayers(players) {
     this.setState({
       players: players
+    });
+  }
+
+  setLevel(level) {
+    this.setState({
+      level: level
     });
   }
 
@@ -347,6 +350,28 @@ export default class Game extends React.Component {
             <div className="players">
               <div className="two-player" onClick={() => this.setPlayers(2)}>
                 Two Player
+              </div>
+            </div>
+          </div>
+        </Router>
+      );
+    }
+
+    if (this.state.players === 1 && this.state.level === null) {
+      return (
+        <Router history={browserHistory} basename={"react-checkers"}>
+          <div className="players-select">
+            <div className="players">
+              <div className="one-player" onClick={() => this.setLevel("easy")}>
+                Easy
+              </div>
+            </div>
+            <div className="players">
+              <div
+                className="two-player"
+                onClick={() => this.setLevel("medium")}
+              >
+                Medium
               </div>
             </div>
           </div>
