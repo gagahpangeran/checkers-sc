@@ -8,7 +8,7 @@ export default class Opponent extends ReactCheckers {
       return this.getRandomMove(boardState, player);
     }
 
-    return this.getMinMaxMove(newState, boardState, player, 0);
+    return this.getMinMaxMove(newState, boardState, player, 3);
   }
 
   getPossibleMoves(boardState, player) {
@@ -93,11 +93,6 @@ export default class Opponent extends ReactCheckers {
           postMoveState.boardState,
           "player2"
         );
-
-        newState.history.push({
-          boardState: postMoveState.boardState,
-          currentPlayer: true
-        });
 
         score = pieceOfPlayer2 - pieceOfPlayer1;
 

@@ -18,7 +18,8 @@ export default class Game extends React.Component {
     this.AI = new AI(this.columns);
 
     this.state = {
-      players: null,
+      // players: null,
+      players: 1,
       history: [
         {
           boardState: this.createBoard(),
@@ -31,7 +32,7 @@ export default class Game extends React.Component {
       hasJumped: null,
       stepNumber: 0,
       winner: null,
-      level: null
+      level: "medium"
     };
   }
 
@@ -394,9 +395,9 @@ export default class Game extends React.Component {
             />
           </div>
           <div className="time-travel">
-            <button className={undoClass} onClick={() => this.undo()}>
+            {/* <button className={undoClass} onClick={() => this.undo()}>
               Undo
-            </button>
+            </button> */}
           </div>
         </div>
       </Router>
