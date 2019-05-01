@@ -7,16 +7,6 @@ export default class Board extends Component {
   state = {
     board: [
       [
-        new Piece("M"),
-        new Piece("0"),
-        new Piece("M"),
-        new Piece("0"),
-        new Piece("M"),
-        new Piece("0"),
-        new Piece("M"),
-        new Piece("0")
-      ],
-      [
         new Piece("0"),
         new Piece("M"),
         new Piece("0"),
@@ -38,6 +28,16 @@ export default class Board extends Component {
       ],
       [
         new Piece("0"),
+        new Piece("M"),
+        new Piece("0"),
+        new Piece("M"),
+        new Piece("0"),
+        new Piece("M"),
+        new Piece("0"),
+        new Piece("M")
+      ],
+      [
+        new Piece("0"),
         new Piece("0"),
         new Piece("0"),
         new Piece("0"),
@@ -54,6 +54,16 @@ export default class Board extends Component {
         new Piece("0"),
         new Piece("0"),
         new Piece("0"),
+        new Piece("0")
+      ],
+      [
+        new Piece("B"),
+        new Piece("0"),
+        new Piece("B"),
+        new Piece("0"),
+        new Piece("B"),
+        new Piece("0"),
+        new Piece("B"),
         new Piece("0")
       ],
       [
@@ -75,19 +85,9 @@ export default class Board extends Component {
         new Piece("0"),
         new Piece("B"),
         new Piece("0")
-      ],
-      [
-        new Piece("0"),
-        new Piece("B"),
-        new Piece("0"),
-        new Piece("B"),
-        new Piece("0"),
-        new Piece("B"),
-        new Piece("0"),
-        new Piece("B")
       ]
     ],
-    turn: 1,
+    turn: 2,
     possibleMove: [],
     possibleJumpMove: [],
     clickedBefore: [],
