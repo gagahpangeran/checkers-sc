@@ -1,0 +1,42 @@
+body {
+    background: #ccc;
+  }
+  
+  .board {
+    height: 640px;
+    width: 640px;
+  }
+  
+  .row {
+    display: flex;
+    width: 100%;
+    height: 80px;
+  }
+  
+  .column {
+    width: 80px;
+    height: 80px;
+    background: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .row:nth-child(odd) .column:nth-child(odd),
+  .row:nth-child(even) .column:nth-child(even) {
+    background: white;
+  }
+  
+  .piece {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+  }
+  
+  .red {
+    background: red;
+  }
+  
+  .blue {
+    background: blue;
+  }
