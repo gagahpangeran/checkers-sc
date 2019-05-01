@@ -63,7 +63,7 @@ function getNextStateBoard(oldState) {
       const nextJump = checkPossibleJumpMove(
         row,
         column,
-        newBoard[row][column],
+        newBoard[row][column].color,
         newBoard
       );
 
