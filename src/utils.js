@@ -2,6 +2,7 @@ import Piece from "./piece";
 
 function execute(oldState) {
   const state = getNextStateBoard(oldState);
+  state.board = checkKing(state.board);
   return state;
 }
 
@@ -30,8 +31,14 @@ function getNextStateBoard(oldState) {
   if (clickedBefore.length === 0) {
     state.clickedBefore = [row, column];
     state.clickedNow = [];
-    state.possibleMove = checkPossibleMove(row, column, piece, board);
-    state.possibleJumpMove = checkPossibleJumpMove(row, column, piece, board);
+    state.possibleMove = checkPossibleMove(row, column, piece, isKing, board);
+    state.possibleJumpMove = checkPossibleJumpMove(
+      row,
+      column,
+      piece,
+      isKing,
+      board
+    );
 
     return state;
   }
@@ -58,12 +65,12 @@ function getNextStateBoard(oldState) {
       newBoard[rowBefore][columnBefore] = new Piece("0");
       newBoard[canJump[2]][canJump[3]] = new Piece("0");
       state.board = newBoard;
-      console.log("new board", newBoard);
 
       const nextJump = checkPossibleJumpMove(
         row,
         column,
         newBoard[row][column].color,
+        newBoard[row][column].isKing,
         newBoard
       );
 
@@ -107,10 +114,10 @@ function getNextStateBoard(oldState) {
   return state;
 }
 
-function checkPossibleMove(row, column, piece, board) {
+function checkPossibleMove(row, column, piece, isKing, board) {
   const move = [];
 
-  if (piece === "B") {
+  if (piece === "B" || isKing) {
     if (
       row - 1 >= 0 &&
       column - 1 >= 0 &&
@@ -125,7 +132,7 @@ function checkPossibleMove(row, column, piece, board) {
     ) {
       move.push([row - 1, column + 1]);
     }
-  } else if (piece === "M") {
+  } else if (piece === "M" || isKing) {
     if (
       row + 1 <= 7 &&
       column - 1 >= 0 &&
@@ -145,14 +152,7 @@ function checkPossibleMove(row, column, piece, board) {
   return move;
 }
 
-function checkPossibleJumpMove(row, column, piece, board) {
-  console.log(
-    "masuk",
-    row - 2 >= 0 &&
-      column + 2 <= 7 &&
-      board[row - 1][column + 1].color === "M" &&
-      board[row - 2][column + 2].color === "0"
-  );
+function checkPossibleJumpMove(row, column, piece, isKing, board) {
   const move = [];
   if (piece === "B") {
     if (
@@ -161,7 +161,6 @@ function checkPossibleJumpMove(row, column, piece, board) {
       board[row - 1][column - 1].color === "M" &&
       board[row - 2][column - 2].color === "0"
     ) {
-      console.log("masuk if 1");
       move.push([row - 2, column - 2, row - 1, column - 1]);
     }
     if (
@@ -170,8 +169,26 @@ function checkPossibleJumpMove(row, column, piece, board) {
       board[row - 1][column + 1].color === "M" &&
       board[row - 2][column + 2].color === "0"
     ) {
-      console.log("masuk if 2");
       move.push([row - 2, column + 2, row - 1, column + 1]);
+    }
+
+    if (isKing) {
+      if (
+        row + 2 <= 7 &&
+        column - 2 >= 0 &&
+        board[row + 1][column - 1].color === "M" &&
+        board[row + 2][column - 2].color === "0"
+      ) {
+        move.push([row + 2, column - 2, row + 1, column - 1]);
+      }
+      if (
+        row + 2 <= 7 &&
+        column + 2 <= 7 &&
+        board[row + 2][column + 2].color === "0" &&
+        board[row + 1][column + 1].color === "M"
+      ) {
+        move.push([row + 2, column + 2, row + 1, column + 1]);
+      }
     }
   } else if (piece === "M") {
     if (
@@ -180,7 +197,6 @@ function checkPossibleJumpMove(row, column, piece, board) {
       board[row + 1][column - 1].color === "B" &&
       board[row + 2][column - 2].color === "0"
     ) {
-      console.log("masuk if 3");
       move.push([row + 2, column - 2, row + 1, column - 1]);
     }
     if (
@@ -189,13 +205,50 @@ function checkPossibleJumpMove(row, column, piece, board) {
       board[row + 2][column + 2].color === "0" &&
       board[row + 1][column + 1].color === "B"
     ) {
-      console.log("masuk if 4");
       move.push([row + 2, column + 2, row + 1, column + 1]);
     }
+
+    if (isKing) {
+      if (
+        row - 2 >= 0 &&
+        column - 2 >= 0 &&
+        board[row - 1][column - 1].color === "B" &&
+        board[row - 2][column - 2].color === "0"
+      ) {
+        move.push([row - 2, column - 2, row - 1, column - 1]);
+      }
+      if (
+        row - 2 >= 0 &&
+        column + 2 <= 7 &&
+        board[row - 1][column + 1].color === "B" &&
+        board[row - 2][column + 2].color === "0"
+      ) {
+        move.push([row - 2, column + 2, row - 1, column + 1]);
+      }
+    }
   }
-  console.log(move);
 
   return move;
+}
+
+function checkKing(board) {
+  const newBoard = JSON.parse(JSON.stringify(board));
+  const firstRow = newBoard[0];
+  const lastRow = newBoard[7];
+
+  for (let ii = 0; ii < firstRow.length; ii++) {
+    if (firstRow[ii].color === "B") {
+      firstRow[ii].isKing = true;
+    }
+  }
+
+  for (let ii = 0; ii < lastRow.length; ii++) {
+    if (lastRow[ii].color === "M") {
+      lastRow[ii].isKing = true;
+    }
+  }
+
+  return newBoard;
 }
 
 export default execute;

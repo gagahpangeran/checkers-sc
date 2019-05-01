@@ -116,8 +116,16 @@ export default class Board extends Component {
             className="column"
             onClick={() => this.handleClick(rowIdx, columnIdx)}
           >
-            {column.color === "M" && <div className="red piece" />}
-            {column.color === "B" && <div className="blue piece" />}
+            {column.color === "M" && (
+              <div className="red piece">
+                {column.isKing && <div class="king" />}
+              </div>
+            )}
+            {column.color === "B" && (
+              <div className="blue piece">
+                {column.isKing && <div class="king" />}
+              </div>
+            )}
           </div>
         ))}
       </div>
