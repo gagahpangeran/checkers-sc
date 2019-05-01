@@ -29,16 +29,22 @@ function getNextStateBoard(oldState) {
   }
 
   if (clickedBefore.length === 0) {
-    state.clickedBefore = [row, column];
-    state.clickedNow = [];
-    state.possibleMove = checkPossibleMove(row, column, piece, isKing, board);
-    state.possibleJumpMove = checkPossibleJumpMove(
-      row,
-      column,
-      piece,
-      isKing,
-      board
-    );
+    const possibleClick = getPossibleClick(piece, board);
+
+    if (possibleClick.find(el => el[0] === row && el[1] === column)) {
+      state.clickedBefore = [row, column];
+      state.clickedNow = [];
+      state.possibleMove = checkPossibleMove(row, column, piece, isKing, board);
+      state.possibleJumpMove = checkPossibleJumpMove(
+        row,
+        column,
+        piece,
+        isKing,
+        board
+      );
+
+      return state;
+    }
 
     return state;
   }
@@ -65,6 +71,12 @@ function getNextStateBoard(oldState) {
       newBoard[rowBefore][columnBefore] = new Piece("0");
       newBoard[canJump[2]][canJump[3]] = new Piece("0");
       state.board = newBoard;
+
+      if (turn === 1) {
+        state.piecePlayerRed -= 1;
+      } else {
+        state.piecePlayerBlue -= 1;
+      }
 
       const nextJump = checkPossibleJumpMove(
         row,
@@ -132,7 +144,9 @@ function checkPossibleMove(row, column, piece, isKing, board) {
     ) {
       move.push([row - 1, column + 1]);
     }
-  } else if (piece === "M" || isKing) {
+  }
+
+  if (piece === "M" || isKing) {
     if (
       row + 1 <= 7 &&
       column - 1 >= 0 &&
@@ -190,7 +204,9 @@ function checkPossibleJumpMove(row, column, piece, isKing, board) {
         move.push([row + 2, column + 2, row + 1, column + 1]);
       }
     }
-  } else if (piece === "M") {
+  }
+
+  if (piece === "M") {
     if (
       row + 2 <= 7 &&
       column - 2 >= 0 &&
@@ -249,6 +265,46 @@ function checkKing(board) {
   }
 
   return newBoard;
+}
+
+function getPossibleClick(piece, board) {
+  let click = [];
+  let clickJump = [];
+
+  for (let ii = 0; ii <= 7; ii++) {
+    for (let jj = 0; jj <= 7; jj++) {
+      if (board[ii][jj].color === piece) {
+        const possibleJumpMove = checkPossibleJumpMove(
+          ii,
+          jj,
+          board[ii][jj].color,
+          board[ii][jj].isKing,
+          board
+        );
+        const possibleMove = checkPossibleMove(
+          ii,
+          jj,
+          board[ii][jj].color,
+          board[ii][jj].isKing,
+          board
+        );
+
+        if (possibleJumpMove.length > 0) {
+          clickJump.push([ii, jj]);
+        }
+
+        if (possibleMove.length > 0) {
+          click.push([ii, jj]);
+        }
+      }
+    }
+  }
+
+  if (clickJump.length > 0) {
+    return clickJump;
+  }
+
+  return click;
 }
 
 export default execute;
