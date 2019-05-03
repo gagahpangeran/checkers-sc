@@ -87,7 +87,17 @@ export default class Board extends Component {
         new Piece("0")
       ]
     ],
-    turn: 2,
+    boardClicked: [
+      [false, false, false, false, false, false, false, false],
+      [false, false, false, false, false, false, false, false],
+      [false, false, false, false, false, false, false, false],
+      [false, false, false, false, false, false, false, false],
+      [false, false, false, false, false, false, false, false],
+      [true, false, true, false, true, false, true, false],
+      [false, false, false, false, false, false, false, false],
+      [false, false, false, false, false, false, false, false]
+    ],
+    turn: 1,
     possibleMove: [],
     possibleJumpMove: [],
     clickedBefore: [],
@@ -109,11 +119,14 @@ export default class Board extends Component {
   };
 
   renderBoard = board => {
+    const { boardClicked } = this.state;
     return board.map((row, rowIdx) => (
       <div className="row">
         {row.map((column, columnIdx) => (
           <div
-            className="column"
+            className={`column ${
+              boardClicked[rowIdx][columnIdx] ? "clicked" : ""
+            }`}
             onClick={() => this.handleClick(rowIdx, columnIdx)}
           >
             {column.color === "M" && (
@@ -135,6 +148,15 @@ export default class Board extends Component {
   render() {
     console.log(this.state);
     console.table(this.state.board);
-    return <div className="board">{this.renderBoard(this.state.board)}</div>;
+    return (
+      <div className="board">
+        <div className="player-turn">
+          <h1 className={`player-${this.state.turn}`}>
+            Player {this.state.turn} Turn
+          </h1>
+        </div>
+        {this.renderBoard(this.state.board)}
+      </div>
+    );
   }
 }

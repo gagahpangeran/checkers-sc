@@ -5,6 +5,32 @@ body {
 .board {
   height: 640px;
   width: 640px;
+  border: 20px solid #555;
+  position: relative;
+}
+
+.player-turn {
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.player-turn h1 {
+  background: #fff;
+  margin: 0;
+  padding: 8px 16px;
+  border: 20px solid #555;
+}
+
+.player-turn .player-1 {
+  color: blue;
+}
+
+.player-turn .player-2 {
+  color: red;
 }
 
 .row {
@@ -26,6 +52,10 @@ body {
 .row:nth-child(even) .column:nth-child(even) {
   background: white;
 }
+
+/* .column.clicked {
+  background: yellow !important;
+} */
 
 .piece {
   width: 70px;
