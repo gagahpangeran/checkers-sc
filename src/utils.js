@@ -1,12 +1,12 @@
 import Piece from "./piece";
 
-function execute(oldState) {
+export default function execute(oldState) {
   const state = getNextStateBoard(oldState);
   state.board = checkKing(state.board);
   return state;
 }
 
-function getNextStateBoard(oldState) {
+export function getNextStateBoard(oldState) {
   const state = JSON.parse(JSON.stringify(oldState));
   const {
     board,
@@ -126,7 +126,7 @@ function getNextStateBoard(oldState) {
   return state;
 }
 
-function checkPossibleMove(row, column, piece, isKing, board) {
+export function checkPossibleMove(row, column, piece, isKing, board) {
   const move = [];
 
   if (piece === "B" || isKing) {
@@ -166,7 +166,7 @@ function checkPossibleMove(row, column, piece, isKing, board) {
   return move;
 }
 
-function checkPossibleJumpMove(row, column, piece, isKing, board) {
+export function checkPossibleJumpMove(row, column, piece, isKing, board) {
   const move = [];
   if (piece === "B") {
     if (
@@ -247,7 +247,7 @@ function checkPossibleJumpMove(row, column, piece, isKing, board) {
   return move;
 }
 
-function checkKing(board) {
+export function checkKing(board) {
   const newBoard = JSON.parse(JSON.stringify(board));
   const firstRow = newBoard[0];
   const lastRow = newBoard[7];
@@ -267,7 +267,7 @@ function checkKing(board) {
   return newBoard;
 }
 
-function getPossibleClick(piece, board) {
+export function getPossibleClick(piece, board) {
   let click = [];
   let clickJump = [];
 
@@ -306,5 +306,3 @@ function getPossibleClick(piece, board) {
 
   return click;
 }
-
-export default execute;
