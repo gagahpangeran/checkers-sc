@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import execute from "./utils";
+import minimax from "./minimax";
 import Piece from "./piece";
 import "./board.css";
 
@@ -106,16 +107,23 @@ export default class Board extends Component {
     piecePlayerRed: 12
   };
 
-  handleClick = (row, column) => {
-    this.setState(
-      {
-        clickedNow: [row, column]
-      },
-      () => {
-        const newState = execute(this.state);
-        this.setState({ ...newState });
-      }
-    );
+  handleClick = async (row, column) => {
+    await this.setState({
+      clickedNow: [row, column]
+    });
+
+    this.boardExecute();
+  };
+
+  boardExecute = async () => {
+    let newState = execute(this.state);
+    await this.setState({ ...newState });
+
+    while (this.state.turn === 2) {
+      newState = minimax(this.state, 1);
+
+      this.setState({ ...newState });
+    }
   };
 
   renderBoard = board => {
