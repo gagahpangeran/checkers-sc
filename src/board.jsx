@@ -196,8 +196,12 @@ export default class Board extends Component {
           <p>
             This is our project for Intelligent System Course. Feel free to play
             it, but we're sorry if there is bug, lag, or crash in this game (or
-            the design is bad). You can check the source code and/or contribute
-            to this project{" "}
+            the design is bad, the animation is also poor).{" "}
+            <a href="https://www.wikihow.com/Play-Checkers" target="_blank">
+              Check here
+            </a>{" "}
+            for how to play checker. You can check the source code and/or
+            contribute to this project{" "}
             <a
               href="https://gitlab.com/kelompok-dadakan/checkers-game"
               target="_blank"
@@ -231,6 +235,8 @@ export default class Board extends Component {
         </div>
       );
     }
+
+    console.log(this.state);
 
     return (
       <>
