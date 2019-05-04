@@ -105,7 +105,6 @@ export default class Board extends Component {
     clickedNow: [],
     piecePlayerBlue: 12,
     piecePlayerRed: 12,
-    player: 2,
     winner: ""
   };
 
@@ -121,11 +120,7 @@ export default class Board extends Component {
     let newState = execute(this.state);
     await this.setState({ ...newState });
 
-    if (this.checkWin()) {
-      return;
-    }
-
-    if (this.state.player === 2) {
+    if (await this.checkWin()) {
       return;
     }
 
@@ -134,12 +129,12 @@ export default class Board extends Component {
 
       await this.setState({ ...nextState });
 
-      if (this.checkWin()) {
+      if (await this.checkWin()) {
         return;
       }
     }
 
-    if (this.checkWin()) {
+    if (await this.checkWin()) {
       return;
     }
   };
