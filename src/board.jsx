@@ -95,7 +95,9 @@ export default class Board extends Component {
     clickedNow: [],
     piecePlayerBlue: 12,
     piecePlayerRed: 12,
-    winner: ""
+    winner: "",
+    player: null,
+    level: null
   };
 
   handleClick = async (row, column) => {
@@ -114,8 +116,12 @@ export default class Board extends Component {
       return;
     }
 
+    if (this.state.player === 2) {
+      return;
+    }
+
     while (this.state.turn === 2) {
-      const nextState = minimax(this.state, 4);
+      const nextState = minimax(this.state);
 
       await this.setState({ ...nextState });
 
@@ -150,7 +156,6 @@ export default class Board extends Component {
   };
 
   renderBoard = board => {
-    const { boardClicked } = this.state;
     return board.map((row, rowIdx) => (
       <div className="row" key={`row${rowIdx}`}>
         {row.map((column, columnIdx) => (
@@ -175,7 +180,58 @@ export default class Board extends Component {
     ));
   };
 
+  changeNumberOfPlayer = number => {
+    this.setState({ player: number });
+  };
+
+  changeLevel = level => {
+    this.setState({ level: level });
+  };
+
   render() {
+    if (this.state.player === null) {
+      return (
+        <div className="choose">
+          <h1>Checkers SC</h1>
+          <p>
+            This is our project for Intelligent System Course. Feel free to play
+            it, but we're sorry if there is bug, lag, or crash in this game (or
+            the design is bad). You can check the source code and/or contribute
+            to this project{" "}
+            <a
+              href="https://gitlab.com/kelompok-dadakan/checkers-game"
+              target="_blank"
+            >
+              here
+            </a>
+            .<br /> <br />
+            Sincerely, Kelompok Dadakan.
+          </p>
+          <div className="button">
+            <button onClick={() => this.changeNumberOfPlayer(1)}>
+              1 Player
+            </button>
+            <button onClick={() => this.changeNumberOfPlayer(2)}>
+              2 Player
+            </button>
+          </div>
+        </div>
+      );
+    }
+
+    if (this.state.player === 1 && this.state.level === null) {
+      return (
+        <div className="choose">
+          <h1>Select Level</h1>
+          <div className="button">
+            <button onClick={() => this.changeLevel("easy")}>Easy</button>
+            <button onClick={() => this.changeLevel("medium")}>Medium</button>
+            <button onClick={() => this.changeLevel("hard")}>Hard</button>
+          </div>
+        </div>
+      );
+    }
+
     return (
       <>
         <div className="player-turn">

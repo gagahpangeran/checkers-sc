@@ -1,11 +1,23 @@
 import execute, { getPossibleClick } from "./utils";
 
-export default function executeMinimax(oldState, depth) {
+export default function executeMinimax(oldState) {
+  const { level } = oldState;
+  let depth;
+
+  if (level === "easy") {
+    depth = 0;
+  } else if (level === "medium") {
+    depth = 2;
+  } else if (level === "hard") {
+    depth = 4;
+  }
+
   const nextState = max(oldState, depth, -1000, 1000);
   return nextState.nextState;
 }
 
 function max(oldState, depth = 0, alpha, beta) {
+  console.log("max", depth, "loading");
   const state = JSON.parse(JSON.stringify(oldState));
   const possibleClick = getPossibleClick("M", state.board);
 
@@ -108,6 +120,7 @@ function max(oldState, depth = 0, alpha, beta) {
 }
 
 function min(oldState, depth = 0, alpha, beta) {
+  console.log("min", depth, "loading");
   const state = JSON.parse(JSON.stringify(oldState));
   const possibleClick = getPossibleClick("B", state.board);
 
