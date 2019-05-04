@@ -1,11 +1,11 @@
 import execute, { getPossibleClick } from "./utils";
 
 export default function executeMinimax(oldState, depth) {
-  const nextState = max(oldState, depth);
+  const nextState = max(oldState, depth, -1000, 1000);
   return nextState.nextState;
 }
 
-function max(oldState, depth = 0) {
+function max(oldState, depth = 0, alpha, beta) {
   const state = JSON.parse(JSON.stringify(oldState));
   const possibleClick = getPossibleClick("M", state.board);
 
@@ -34,8 +34,15 @@ function max(oldState, depth = 0) {
         if (depth === 0) {
           value = result.piecePlayerRed - result.piecePlayerBlue;
         } else {
-          let hehe = min(result, depth - 1);
-          value = hehe.value;
+          value = min(result, depth - 1, alpha, beta).value;
+        }
+
+        if (value > alpha) {
+          alpha = value;
+        }
+
+        if (beta <= alpha) {
+          break;
         }
 
         possibleState.push({
@@ -60,7 +67,15 @@ function max(oldState, depth = 0) {
         if (depth === 0) {
           value = result.piecePlayerRed - result.piecePlayerBlue;
         } else {
-          value = min(result, depth - 1).value;
+          value = min(result, depth - 1, alpha, beta).value;
+        }
+
+        if (value > alpha) {
+          alpha = value;
+        }
+
+        if (beta <= alpha) {
+          break;
         }
 
         possibleState.push({
@@ -80,7 +95,7 @@ function max(oldState, depth = 0) {
   return possibleState[0];
 }
 
-function min(oldState, depth = 0) {
+function min(oldState, depth = 0, alpha, beta) {
   const state = JSON.parse(JSON.stringify(oldState));
   const possibleClick = getPossibleClick("B", state.board);
 
@@ -109,7 +124,15 @@ function min(oldState, depth = 0) {
         if (depth === 0) {
           value = result.piecePlayerBlue - result.piecePlayerRed;
         } else {
-          value = max(result, depth - 1).value;
+          value = max(result, depth - 1, alpha, beta).value;
+        }
+
+        if (value < beta) {
+          beta = value;
+        }
+
+        if (beta <= alpha) {
+          break;
         }
 
         possibleState.push({
@@ -135,7 +158,15 @@ function min(oldState, depth = 0) {
         if (depth === 0) {
           value = result.piecePlayerBlue - result.piecePlayerRed;
         } else {
-          value = max(result, depth - 1).value;
+          value = max(result, depth - 1, alpha, beta).value;
+        }
+
+        if (value < beta) {
+          beta = value;
+        }
+
+        if (beta <= alpha) {
+          break;
         }
 
         possibleState.push({
