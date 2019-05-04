@@ -88,16 +88,6 @@ export default class Board extends Component {
         new Piece("0")
       ]
     ],
-    boardClicked: [
-      [false, false, false, false, false, false, false, false],
-      [false, false, false, false, false, false, false, false],
-      [false, false, false, false, false, false, false, false],
-      [false, false, false, false, false, false, false, false],
-      [false, false, false, false, false, false, false, false],
-      [true, false, true, false, true, false, true, false],
-      [false, false, false, false, false, false, false, false],
-      [false, false, false, false, false, false, false, false]
-    ],
     turn: 1,
     possibleMove: [],
     possibleJumpMove: [],
@@ -165,9 +155,7 @@ export default class Board extends Component {
       <div className="row" key={`row${rowIdx}`}>
         {row.map((column, columnIdx) => (
           <div
-            className={`column ${
-              boardClicked[rowIdx][columnIdx] ? "clicked" : ""
-            }`}
+            className="column"
             onClick={() => this.handleClick(rowIdx, columnIdx)}
             key={`column${columnIdx}`}
           >
