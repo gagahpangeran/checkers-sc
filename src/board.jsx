@@ -120,7 +120,7 @@ export default class Board extends Component {
     await this.setState({ ...newState });
 
     while (this.state.turn === 2) {
-      newState = minimax(this.state, 1);
+      newState = minimax(this.state, 3);
 
       this.setState({ ...newState });
     }
@@ -129,13 +129,14 @@ export default class Board extends Component {
   renderBoard = board => {
     const { boardClicked } = this.state;
     return board.map((row, rowIdx) => (
-      <div className="row">
+      <div className="row" key={`row${rowIdx}`}>
         {row.map((column, columnIdx) => (
           <div
             className={`column ${
               boardClicked[rowIdx][columnIdx] ? "clicked" : ""
             }`}
             onClick={() => this.handleClick(rowIdx, columnIdx)}
+            key={`column${columnIdx}`}
           >
             {column.color === "M" && (
               <div className="red piece">
@@ -154,8 +155,7 @@ export default class Board extends Component {
   };
 
   render() {
-    console.log(this.state);
-    console.table(this.state.board);
+    // console.log(this.state);
     return (
       <div className="board">
         <div className="player-turn">
