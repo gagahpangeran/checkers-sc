@@ -20,6 +20,7 @@ export function getNextStateBoard(oldState) {
   const piece = board[row][column].color;
   const isKing = board[row][column].isKing;
 
+  // check valid click
   if (
     (piece === "0" && clickedBefore.length === 0) ||
     (piece === "B" && turn !== 1) ||
@@ -28,9 +29,11 @@ export function getNextStateBoard(oldState) {
     return state;
   }
 
+  // click piece that wanto move
   if (clickedBefore.length === 0) {
     const possibleClick = getPossibleClick(piece, board);
 
+    // check if piece clicked is possible to move or not
     if (possibleClick.find(el => el[0] === row && el[1] === column)) {
       state.clickedBefore = [row, column];
       state.clickedNow = [];
@@ -51,6 +54,7 @@ export function getNextStateBoard(oldState) {
 
   const [rowBefore, columnBefore] = clickedBefore;
 
+  // if double click at the same piece
   if (rowBefore === row && columnBefore === column) {
     state.clickedBefore = [];
     state.clickedNow = [];
@@ -60,11 +64,13 @@ export function getNextStateBoard(oldState) {
     return state;
   }
 
+  // force jump if can jump
   if (possibleJumpMove.length > 0) {
     const canJump = possibleJumpMove.find(
       el => el[0] === row && el[1] === column
     );
 
+    // check if move for jump is valid
     if (canJump) {
       const newBoard = JSON.parse(JSON.stringify(board));
       newBoard[row][column] = board[rowBefore][columnBefore];
@@ -72,6 +78,7 @@ export function getNextStateBoard(oldState) {
       newBoard[canJump[2]][canJump[3]] = new Piece("0");
       state.board = newBoard;
 
+      // counting piece
       if (turn === 1) {
         state.piecePlayerRed -= 1;
       } else {

@@ -10,12 +10,9 @@ body {
 }
 
 .player-turn {
-  position: absolute;
-  bottom: 100%;
-  left: 0;
   width: 100%;
-  display: flex;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: auto auto auto;
 }
 
 .player-turn h1 {
@@ -23,6 +20,11 @@ body {
   margin: 0;
   padding: 8px 16px;
   border: 20px solid #555;
+  border-bottom: none;
+}
+
+.player-turn h1:not(:first-child) {
+  border-left: none;
 }
 
 .player-turn .player-1 {
@@ -31,6 +33,18 @@ body {
 
 .player-turn .player-2 {
   color: red;
+}
+
+.player-turn .vs-piece .red {
+  color: red;
+}
+
+.player-turn .vs-piece .blue {
+  color: blue;
+}
+
+.player-turn .new-game {
+  cursor: pointer;
 }
 
 .row {
@@ -66,11 +80,11 @@ body {
   align-items: center;
 }
 
-.red {
+.piece.red {
   background: red;
 }
 
-.blue {
+.piece.blue {
   background: blue;
 }
 

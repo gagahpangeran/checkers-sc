@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import execute from "./utils";
+import execute, { getPossibleClick } from "./utils";
 import minimax from "./minimax";
 import Piece from "./piece";
 import "./board.css";
@@ -104,7 +104,9 @@ export default class Board extends Component {
     clickedBefore: [],
     clickedNow: [],
     piecePlayerBlue: 12,
-    piecePlayerRed: 12
+    piecePlayerRed: 12,
+    player: 2,
+    winner: ""
   };
 
   handleClick = async (row, column) => {
@@ -119,11 +121,47 @@ export default class Board extends Component {
     let newState = execute(this.state);
     await this.setState({ ...newState });
 
-    while (this.state.turn === 2) {
-      newState = minimax(this.state, 3);
-
-      this.setState({ ...newState });
+    if (this.checkWin()) {
+      return;
     }
+
+    if (this.state.player === 2) {
+      return;
+    }
+
+    while (this.state.turn === 2) {
+      const nextState = minimax(this.state, 4);
+
+      await this.setState({ ...nextState });
+
+      if (this.checkWin()) {
+        return;
+      }
+    }
+
+    if (this.checkWin()) {
+      return;
+    }
+  };
+
+  checkWin = async () => {
+    const { piecePlayerBlue, piecePlayerRed, turn } = this.state;
+    const possibleClick = getPossibleClick(
+      turn === 1 ? "B" : "M",
+      this.state.board
+    );
+
+    if (piecePlayerBlue === 0) {
+      await this.setState({ winner: "Player 2" });
+      return true;
+    } else if (piecePlayerRed === 0) {
+      await this.setState({ winner: "Player 1" });
+      return true;
+    } else if (possibleClick.length === 0) {
+      await this.setState({ winner: turn === 1 ? "Player 2" : "Player 1" });
+      return true;
+    }
+    return false;
   };
 
   renderBoard = board => {
@@ -140,12 +178,12 @@ export default class Board extends Component {
           >
             {column.color === "M" && (
               <div className="red piece">
-                {column.isKing && <div class="king" />}
+                {column.isKing && <div className="king" />}
               </div>
             )}
             {column.color === "B" && (
               <div className="blue piece">
-                {column.isKing && <div class="king" />}
+                {column.isKing && <div className="king" />}
               </div>
             )}
           </div>
@@ -155,16 +193,30 @@ export default class Board extends Component {
   };
 
   render() {
-    // console.log(this.state);
     return (
-      <div className="board">
+      <>
         <div className="player-turn">
+          <h1 className="vs-piece">
+            <span className="blue">{this.state.piecePlayerBlue}</span>
+            <span> VS </span>
+            <span className="red">{this.state.piecePlayerRed}</span>
+          </h1>
           <h1 className={`player-${this.state.turn}`}>
-            Player {this.state.turn} Turn
+            {this.state.winner
+              ? `${this.state.winner} Win`
+              : `Player ${this.state.turn} Turn`}
+          </h1>
+          <h1
+            onClick={() => {
+              window.location.reload();
+            }}
+            className="new-game"
+          >
+            New Game
           </h1>
         </div>
-        {this.renderBoard(this.state.board)}
-      </div>
+        <div className="board">{this.renderBoard(this.state.board)}</div>
+      </>
     );
   }
 }

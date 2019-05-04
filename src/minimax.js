@@ -6,9 +6,13 @@ export default function executeMinimax(oldState, depth) {
 }
 
 function max(oldState, depth = 0) {
-  console.log("max", depth);
   const state = JSON.parse(JSON.stringify(oldState));
   const possibleClick = getPossibleClick("M", state.board);
+
+  if (possibleClick.length === 0) {
+    return { nextState: state, value: 0 };
+  }
+
   let possibleState = [];
 
   for (let ii = 0; ii < possibleClick.length; ii++) {
@@ -77,9 +81,13 @@ function max(oldState, depth = 0) {
 }
 
 function min(oldState, depth = 0) {
-  console.log("min", depth);
   const state = JSON.parse(JSON.stringify(oldState));
   const possibleClick = getPossibleClick("B", state.board);
+
+  if (possibleClick.length === 0) {
+    return { nextState: state, value: 0 };
+  }
+
   let possibleState = [];
 
   for (let ii = 0; ii < possibleClick.length; ii++) {
