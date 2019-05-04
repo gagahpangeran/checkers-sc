@@ -2,6 +2,10 @@
 
 Repositori untuk proyek Sistem Cerdas Kelompok Dadakan
 
+## Repo
+
+[https://gitlab.com/kelompok-dadakan/checkers-game](https://gitlab.com/kelompok-dadakan/checkers-game)
+
 ## Live Version
 
 [https://checker-sc.netlify.com/](https://checker-sc.netlify.com/)
