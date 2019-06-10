@@ -1,12 +1,12 @@
 import Piece from "./piece";
 
-export default function execute(oldState) {
+export default function execute(oldState: any) {
   const state = getNextStateBoard(oldState);
   state.board = checkKing(state.board);
   return state;
 }
 
-export function getNextStateBoard(oldState) {
+export function getNextStateBoard(oldState: any) {
   const state = JSON.parse(JSON.stringify(oldState));
   const {
     board,
@@ -67,7 +67,7 @@ export function getNextStateBoard(oldState) {
   // force jump if can jump
   if (possibleJumpMove.length > 0) {
     const canJump = possibleJumpMove.find(
-      el => el[0] === row && el[1] === column
+      (el: number[]) => el[0] === row && el[1] === column
     );
 
     // check if move for jump is valid
@@ -115,7 +115,7 @@ export function getNextStateBoard(oldState) {
     return state;
   }
 
-  if (possibleMove.find(el => el[0] === row && el[1] === column)) {
+  if (possibleMove.find((el: number[]) => el[0] === row && el[1] === column)) {
     const newBoard = JSON.parse(JSON.stringify(board));
     newBoard[row][column] = board[rowBefore][columnBefore];
     newBoard[rowBefore][columnBefore] = new Piece("0");
@@ -133,7 +133,13 @@ export function getNextStateBoard(oldState) {
   return state;
 }
 
-export function checkPossibleMove(row, column, piece, isKing, board) {
+export function checkPossibleMove(
+  row: number,
+  column: number,
+  piece: String,
+  isKing: boolean,
+  board: any
+): any {
   const move = [];
 
   if (piece === "B" || isKing) {
@@ -173,7 +179,13 @@ export function checkPossibleMove(row, column, piece, isKing, board) {
   return move;
 }
 
-export function checkPossibleJumpMove(row, column, piece, isKing, board) {
+export function checkPossibleJumpMove(
+  row: number,
+  column: number,
+  piece: String,
+  isKing: boolean,
+  board: any
+): any {
   const move = [];
   if (piece === "B") {
     if (
@@ -254,7 +266,7 @@ export function checkPossibleJumpMove(row, column, piece, isKing, board) {
   return move;
 }
 
-export function checkKing(board) {
+export function checkKing(board: any) {
   const newBoard = JSON.parse(JSON.stringify(board));
   const firstRow = newBoard[0];
   const lastRow = newBoard[7];
@@ -274,7 +286,7 @@ export function checkKing(board) {
   return newBoard;
 }
 
-export function getPossibleClick(piece, board) {
+export function getPossibleClick(piece: String, board: any) {
   let click = [];
   let clickJump = [];
 

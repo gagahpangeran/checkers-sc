@@ -100,7 +100,7 @@ export default class Board extends Component {
     level: null
   };
 
-  handleClick = async (row, column) => {
+  handleClick = async (row: number, column: number) => {
     await this.setState({
       clickedNow: [row, column]
     });
@@ -155,7 +155,7 @@ export default class Board extends Component {
     return false;
   };
 
-  renderBoard = board => {
+  renderBoard = (board: any[][]) => {
     return board.map((row, rowIdx) => (
       <div className="row" key={`row${rowIdx}`}>
         {row.map((column, columnIdx) => (
@@ -180,11 +180,11 @@ export default class Board extends Component {
     ));
   };
 
-  changeNumberOfPlayer = number => {
+  changeNumberOfPlayer = (number: number) => {
     this.setState({ player: number });
   };
 
-  changeLevel = level => {
+  changeLevel = (level: String) => {
     this.setState({ level: level });
   };
 
